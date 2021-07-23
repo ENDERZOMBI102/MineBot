@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+	<Appenders>
+		<Console name="stdout">
+			<PatternLayout pattern="%highlight{[%level{length=1}] %C{1}.%M: %msg%n%throwable}{ERROR=red, INFO=Bright Cyan, DEBUG=Bright Black, TRACE=white}" disableAnsi="false"/>
+		</Console>
+		<File name="file" fileName="logs/latest.log">
+			<PatternLayout pattern="%d{HH:mm:ss} [%level] %C{1}.%M: %msg%n%throwable"/>
+		</File>
+	</Appenders>
+	<Loggers>
+		<Root level="ALL">
+			<AppenderRef ref="stdout"/>
+			<AppenderRef ref="file"/>
+		</Root>
+	</Loggers>
+</Configuration>
