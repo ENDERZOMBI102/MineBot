@@ -1,6 +1,8 @@
 package com.enderzombi102.minebot;
 
 import com.enderzombi102.minebot.api.Manager;
+import com.enderzombi102.minebot.command.CommandManager;
+import com.enderzombi102.minebot.manager.MessageManager;
 import com.enderzombi102.minebot.util.Constants;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
@@ -14,13 +16,17 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public final class MineBot implements com.enderzombi102.minebot.api.MineBot {
 
 	private JDA jda;
 	private static MineBot instance;
 	private final Logger logger;
-	private final ArrayList<Manager> managers = new ArrayList<>();
+	private final HashMap<String, Manager> managers = new HashMap<>() {{
+		put( "command", new CommandManager() );
+		put( "message", new MessageManager() );
+	}};
 
 	public static void main(String[] argv) {
 		instance = new MineBot(argv);
@@ -64,12 +70,23 @@ public final class MineBot implements com.enderzombi102.minebot.api.MineBot {
 		}
 		logger.info("Initialized JDA object!");
 		logger.info("Initializing managers..");
-
+		for ( Manager manager : managers.values() ) {
+			try {
+				manager.init(jda);
+			} catch (Exception e) {
+				logger.error("Failed to initialize {}", manager.getClass().getSimpleName() );
+			}
+		}
 		logger.info("Initialized managers!");
 	}
 
 	public JDA getJda() {
 		return jda;
+	}
+
+	@SuppressWarnings("unchecked")
+	public <T extends Manager> T getManager(String name) {
+		return (T) managers.get(name);
 	}
 
 }
