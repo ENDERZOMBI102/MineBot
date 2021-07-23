@@ -1,0 +1,57 @@
+plugins {
+	id 'com.github.johnrengelman.shadow' version '7.0.0'
+	id 'application'
+	id 'java'
+}
+
+configurations {
+    shade
+}
+
+repositories {
+	mavenCentral()
+	maven {
+		url 'https://libraries.minecraft.net'
+	}
+	maven {
+		name 'm2-dv8tion'
+		url 'https://m2.dv8tion.net/releases'
+	}
+}
+
+dependencies {
+	shade implementation( "com.mojang:brigadier:$brigadier_version" )
+	shade implementation( "net.dv8tion:JDA:$jda_version" )
+	shade implementation( "blue.endless:jankson:$jankson_version" )
+	shade implementation( "org.apache.logging.log4j:log4j-api:$log4j_version" )
+	shade implementation( "org.apache.logging.log4j:log4j-core:$log4j_version" )
+	shade implementation( "org.apache.logging.log4j:log4j-slf4j-impl:$log4j_version" )
+}
+
+application {
+	mainClassName = "com.enderzombi102.minebot.MineBot"
+}
+
+java {
+	withSourcesJar()
+
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(16)
+	}
+}
+
+jar {
+	from('LICENSE') {
+		rename {"${it}_${project.archivesBaseName}"}
+	}
+
+	manifest.attributes.put("Main-Class", "com.enderzombi102.minebot.MineBot")
+}
+
+shadowJar {
+    configurations = [ project.configurations.shade ]
+    from sourceSets.main.allSource
+    classifier ''
+}
+
+build.dependsOn( shadowJar )
