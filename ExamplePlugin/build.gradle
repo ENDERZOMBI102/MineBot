@@ -1,0 +1,33 @@
+plugins {
+    id 'java'
+}
+
+group 'com.enderzombi102'
+version 'unspecified'
+
+repositories {
+    mavenCentral()
+    maven {
+        url 'https://libraries.minecraft.net'
+    }
+    maven {
+        name 'm2-dv8tion'
+        url 'https://m2.dv8tion.net/releases'
+    }
+}
+
+dependencies {
+    compileOnly rootProject
+    compileOnly "com.mojang:brigadier:$rootProject.brigadier_version"
+    compileOnly "net.dv8tion:JDA:$rootProject.jda_version"
+    compileOnly "org.apache.logging.log4j:log4j-api:$rootProject.log4j_version"
+}
+
+jar {
+    //noinspection GroovyAssignabilityCheck
+    manifest {
+        attributes([
+                "PluginClass": "com.enderzombi102.exampleplugin.Main"
+        ])
+    }
+}

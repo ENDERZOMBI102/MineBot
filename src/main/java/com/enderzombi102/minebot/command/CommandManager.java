@@ -9,6 +9,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 
+import static com.mojang.brigadier.builder.LiteralArgumentBuilder.literal;
+
 public class CommandManager implements com.enderzombi102.minebot.api.CommandManager {
 
 	private final CommandDispatcher<Message> dispatcher = new CommandDispatcher<>();

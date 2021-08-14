@@ -2,7 +2,9 @@ package com.enderzombi102.minebot;
 
 import com.enderzombi102.minebot.api.Manager;
 import com.enderzombi102.minebot.command.CommandManager;
+import com.enderzombi102.minebot.event.EventManager;
 import com.enderzombi102.minebot.manager.MessageManager;
+import com.enderzombi102.minebot.plugsys.PluginManager;
 import com.enderzombi102.minebot.util.Constants;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
@@ -25,6 +27,8 @@ public final class MineBot implements com.enderzombi102.minebot.api.MineBot {
 	private final HashMap<String, Manager> managers = new HashMap<>() {{
 		put( "command", new CommandManager() );
 		put( "message", new MessageManager() );
+		put( "plugin", new PluginManager() );
+		put( "event", new EventManager() );
 	}};
 
 	public static void main(String[] argv) {
@@ -45,7 +49,6 @@ public final class MineBot implements com.enderzombi102.minebot.api.MineBot {
 		logger = LogManager.getLogger("MineBot");
 	}
 
-	@Override
 	public void start() {
 		logger.info("Starting MineBot v{}!", Constants.version);
 		String token;
@@ -76,6 +79,7 @@ public final class MineBot implements com.enderzombi102.minebot.api.MineBot {
 			}
 		}
 		logger.info("Initialized managers!");
+		( (PluginManager) getManager("plugin") ).loadPlugins( Path.of("./plugins") );
 	}
 
 	@Override
