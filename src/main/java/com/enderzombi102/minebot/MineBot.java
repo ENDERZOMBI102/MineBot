@@ -15,7 +15,6 @@ import javax.security.auth.login.LoginException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public final class MineBot implements com.enderzombi102.minebot.api.MineBot {
@@ -32,9 +31,7 @@ public final class MineBot implements com.enderzombi102.minebot.api.MineBot {
 		instance = new MineBot(argv);
 		try {
 			instance.start();
-		} catch (RuntimeException e) {
-			return;
-		}
+		} catch (RuntimeException ignored) { }
 	}
 
 	public static MineBot getInstance() {
@@ -48,6 +45,7 @@ public final class MineBot implements com.enderzombi102.minebot.api.MineBot {
 		logger = LogManager.getLogger("MineBot");
 	}
 
+	@Override
 	public void start() {
 		logger.info("Starting MineBot v{}!", Constants.version);
 		String token;
@@ -80,10 +78,12 @@ public final class MineBot implements com.enderzombi102.minebot.api.MineBot {
 		logger.info("Initialized managers!");
 	}
 
+	@Override
 	public JDA getJda() {
 		return jda;
 	}
 
+	@Override
 	@SuppressWarnings("unchecked")
 	public <T extends Manager> T getManager(String name) {
 		return (T) managers.get(name);
