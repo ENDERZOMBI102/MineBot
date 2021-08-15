@@ -23,6 +23,7 @@ public final class MineBot implements com.enderzombi102.minebot.api.MineBot {
 	private JDA jda;
 	private static MineBot instance;
 	private final Logger logger;
+	private boolean initialized = false;
 	private final HashMap<String, Manager> managers = new HashMap<>() {{
 		put( "command", new CommandManager() );
 		put( "message", new MessageManager() );
@@ -31,7 +32,7 @@ public final class MineBot implements com.enderzombi102.minebot.api.MineBot {
 	}};
 
 	public static void main(String[] argv) {
-		instance = new MineBot(argv);
+		instance = new MineBot();
 		try {
 			instance.start();
 		} catch (RuntimeException ignored) { }
@@ -41,7 +42,7 @@ public final class MineBot implements com.enderzombi102.minebot.api.MineBot {
 		return instance;
 	}
 
-	public MineBot(String[] argv) {
+	public MineBot() {
 		try {
 			Files.deleteIfExists( Path.of("./logs/latest.log" ) );
 		} catch (IOException ignored) { }
@@ -50,13 +51,22 @@ public final class MineBot implements com.enderzombi102.minebot.api.MineBot {
 
 	public void start() {
 		logger.info("Starting MineBot v{}!", Constants.version);
+		logger.info("Registering shutdown hook..");
+		Runtime.getRuntime().addShutdownHook(
+				new Thread( () -> {
+					if (! initialized ) return;
+					for (Manager manager : managers.values() ) {
+						manager.stop();
+					}
+					jda.shutdownNow();
+				})
+		);
 		String token;
 		if ( ( token = System.getenv("TOKEN") ) == null ) {
-			logger.warn("The \"TOKEN\" environment variable is not defined! Using stdin as input!");
-			Config.useStdin = true;
-			throw new RuntimeException();
+			logger.fatal("The \"TOKEN\" environment variable is not defined!");
+			System.exit(1);
 		}
-		logger.info("Initializing JDA object..");
+		logger.info("Initializing JDA..");
 		try {
 			this.jda = JDABuilder.createLight(token)
 					.setEventManager( new AnnotatedEventManager() )
@@ -65,10 +75,10 @@ public final class MineBot implements com.enderzombi102.minebot.api.MineBot {
 					)
 					.build();
 		} catch (LoginException e) {
-			logger.fatal("Failed to initialize JDA object!", e);
-			throw new RuntimeException();
+			logger.fatal("Failed to initialize JDA!", e);
+			System.exit(1);
 		}
-		logger.info("Initialized JDA object!");
+		logger.info("Initialized JDA!");
 		logger.info("Initializing managers..");
 		for ( Manager manager : managers.values() ) {
 			try {
@@ -77,10 +87,21 @@ public final class MineBot implements com.enderzombi102.minebot.api.MineBot {
 				logger.error("Failed to initialize {}", manager.getClass().getSimpleName() );
 			}
 		}
+		initialized = true;
 		logger.info("Initialized managers!");
 		( (PluginManager) getManager("plugin") ).loadPlugins( Path.of("./plugins") );
 		logger.info("Initializing builtin commands..");
+		( (CommandManager) getManager("command") ).initBuiltin();
+		logger.info("Initialized builtin commands!");
 
+		if ( jda.getStatus() != JDA.Status.CONNECTED ) {
+			logger.info("Waiting for JDA to finish starting..");
+			try {
+				jda.awaitReady();
+			} catch (InterruptedException | IllegalStateException e) {
+				logger.error(e);
+			}
+		}
 	}
 
 	@Override

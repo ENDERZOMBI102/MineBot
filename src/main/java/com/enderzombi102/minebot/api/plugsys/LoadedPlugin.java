@@ -1,6 +1,9 @@
 package com.enderzombi102.minebot.api.plugsys;
 
+import com.enderzombi102.minebot.api.command.CommandProvider;
+
 import java.nio.file.Path;
+import java.util.List;
 
 public interface LoadedPlugin {
 
@@ -24,4 +27,8 @@ public interface LoadedPlugin {
 	 */
 	String GetMainClass();
 
+	/**
+	 * Getter for the plugin's `CommandProvider`s
+	 */
+	List<CommandProvider> GetCommandProviders();
 }

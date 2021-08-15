@@ -26,7 +26,8 @@ public class PluginManager implements com.enderzombi102.minebot.api.plugsys.Plug
 
 	@Override
 	public void stop() {
-
+		for (LoadedPlugin plugin : plugins)
+			plugin.unload();
 	}
 
 	@SuppressWarnings("ResultOfMethodCallIgnored")
@@ -45,7 +46,7 @@ public class PluginManager implements com.enderzombi102.minebot.api.plugsys.Plug
 		for ( LoadedPlugin plugin : plugins ) {
 			plugin.load();
 		}
-		logger.info( "Loaded {} plugins!", plugins.size() );
+		logger.info( "Loaded {}/{} plugins!", plugins.size(), files.length );
 	}
 
 	@Override

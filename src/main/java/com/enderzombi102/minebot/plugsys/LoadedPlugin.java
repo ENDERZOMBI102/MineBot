@@ -1,5 +1,6 @@
 package com.enderzombi102.minebot.plugsys;
 
+import com.enderzombi102.minebot.api.command.CommandProvider;
 import com.enderzombi102.minebot.api.plugsys.Plugin;
 import com.enderzombi102.minebot.api.exception.PluginException;
 
@@ -8,6 +9,7 @@ import static com.enderzombi102.minebot.plugsys.PluginManager.PluginClassLoader;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.List;
 import java.util.jar.JarFile;
 
 public class LoadedPlugin implements com.enderzombi102.minebot.api.plugsys.LoadedPlugin {
@@ -63,5 +65,10 @@ public class LoadedPlugin implements com.enderzombi102.minebot.api.plugsys.Loade
 	@Override
 	public String GetMainClass() {
 		return mainClass;
+	}
+
+	@Override
+	public List<CommandProvider> GetCommandProviders() {
+		return instance.getProviders();
 	}
 }
