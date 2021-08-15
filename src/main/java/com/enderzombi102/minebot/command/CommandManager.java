@@ -23,6 +23,11 @@ public class CommandManager implements com.enderzombi102.minebot.api.command.Com
 	@Override
 	public void stop() { }
 
+	public void initBuiltin() {
+		// TODO: better handling
+		new SayCommand().onRegister(this);
+	}
+
 	@Override
 	public void Execute(Message source, String command) {
 		try {
