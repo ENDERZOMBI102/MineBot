@@ -1,10 +1,10 @@
 package com.enderzombi102.minebot.api.plugsys;
 
 import com.enderzombi102.minebot.api.Manager;
+import com.enderzombi102.minebot.api.exception.PluginException;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
 
 public interface PluginManager extends Manager {
 

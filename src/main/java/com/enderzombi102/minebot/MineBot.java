@@ -3,7 +3,6 @@ package com.enderzombi102.minebot;
 import com.enderzombi102.minebot.api.Manager;
 import com.enderzombi102.minebot.command.CommandManager;
 import com.enderzombi102.minebot.event.EventManager;
-import com.enderzombi102.minebot.manager.MessageManager;
 import com.enderzombi102.minebot.plugsys.PluginManager;
 import com.enderzombi102.minebot.util.Constants;
 import net.dv8tion.jda.api.JDA;
@@ -80,6 +79,8 @@ public final class MineBot implements com.enderzombi102.minebot.api.MineBot {
 		}
 		logger.info("Initialized managers!");
 		( (PluginManager) getManager("plugin") ).loadPlugins( Path.of("./plugins") );
+		logger.info("Initializing builtin commands..");
+
 	}
 
 	@Override

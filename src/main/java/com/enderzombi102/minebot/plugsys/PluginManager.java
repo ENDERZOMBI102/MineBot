@@ -1,6 +1,6 @@
 package com.enderzombi102.minebot.plugsys;
 
-import com.enderzombi102.minebot.api.plugsys.PluginException;
+import com.enderzombi102.minebot.api.exception.PluginException;
 import net.dv8tion.jda.api.JDA;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -12,7 +12,6 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.List;
 
 public class PluginManager implements com.enderzombi102.minebot.api.plugsys.PluginManager {
 

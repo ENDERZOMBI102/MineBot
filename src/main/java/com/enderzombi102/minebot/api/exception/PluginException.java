@@ -1,4 +1,4 @@
-package com.enderzombi102.minebot.api.plugsys;
+package com.enderzombi102.minebot.api.exception;
 
 /**
  * Exception used for plugins

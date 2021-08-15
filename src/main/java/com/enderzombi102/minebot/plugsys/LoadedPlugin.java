@@ -1,7 +1,7 @@
 package com.enderzombi102.minebot.plugsys;
 
 import com.enderzombi102.minebot.api.plugsys.Plugin;
-import com.enderzombi102.minebot.api.plugsys.PluginException;
+import com.enderzombi102.minebot.api.exception.PluginException;
 
 import static com.enderzombi102.minebot.plugsys.PluginManager.PluginClassLoader;
 

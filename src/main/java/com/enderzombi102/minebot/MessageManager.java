@@ -1,4 +1,4 @@
-package com.enderzombi102.minebot.manager;
+package com.enderzombi102.minebot;
 
 import com.enderzombi102.minebot.MineBot;
 import com.enderzombi102.minebot.api.Manager;
@@ -18,13 +18,12 @@ public class MessageManager implements Manager {
 		jda.addEventListener(this);
 	}
 
-	public void stop() {
-
-	}
+	public void stop() { }
 
 	@SubscribeEvent
 	public void onMessage(MessageReceivedEvent evt) {
 		if ( evt.getMessage().getContentRaw().startsWith("/") ) {
+			if ( evt.getAuthor().isBot() || evt.getAuthor().isSystem() ) return;
 			logger.info(
 					"Received command from {}: {}",
 					evt.getAuthor().getName(),
@@ -34,7 +33,7 @@ public class MessageManager implements Manager {
 					.<CommandManager>getManager("command")
 					.Execute(
 							evt.getMessage(),
-							evt.getMessage().getContentRaw().replaceFirst("/", "")
+							evt.getMessage().getContentRaw().substring(1)
 					);
 		}
 	}
