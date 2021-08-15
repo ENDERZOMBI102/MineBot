@@ -89,10 +89,16 @@ public final class MineBot implements com.enderzombi102.minebot.api.MineBot {
 		}
 		initialized = true;
 		logger.info("Initialized managers!");
+		// loading plugins..
 		( (PluginManager) getManager("plugin") ).loadPlugins( Path.of("./plugins") );
+		// plugins loaded!
 		logger.info("Initializing builtin commands..");
 		( (CommandManager) getManager("command") ).initBuiltin();
 		logger.info("Initialized builtin commands!");
+		// TODO: FINISH
+		// creating commands..
+		//
+		// commands created!
 
 		if ( jda.getStatus() != JDA.Status.CONNECTED ) {
 			logger.info("Waiting for JDA to finish starting..");
